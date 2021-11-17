@@ -6,9 +6,11 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI leftScoreText;
     [SerializeField] private TextMeshProUGUI rightScoreText;
 
+    [SerializeField] private FadeUI ScoreUI;
     [SerializeField] private FadeUI menuUI;
     [SerializeField] private FadeUI GameOverUI;
     [SerializeField] private FadeUI PausedUI;
+    [SerializeField] private FadeUI CreditsUI;
 
     [SerializeField] private TextMeshProUGUI WinnerText;
 
@@ -20,6 +22,8 @@ public class UIManager : MonoBehaviour
         menuUI.FadeIn(true);
         GameOverUI.FadeOut(true);
         PausedUI.FadeOut(true);
+        CreditsUI.FadeOut(true);
+        ScoreUI.FadeOut(true);
     }
     public void UpdateScoreText(int leftScore, int rightScore)
     {
@@ -32,9 +36,13 @@ public class UIManager : MonoBehaviour
         menuUI.FadeOut(false);
         GameOverUI.FadeOut(false);
         PausedUI.FadeOut(false);
+        CreditsUI.FadeOut(false);
+        ScoreUI.FadeIn(false);
     }
     public void ShowMenu()
     {
+        ScoreUI.FadeOut(false);
+        CreditsUI.FadeOut(false);
         PausedUI.FadeOut(false);
         GameOverUI.FadeOut(false);
         menuUI.FadeIn(false);
@@ -61,11 +69,14 @@ public class UIManager : MonoBehaviour
                 Time.timeScale = 1;
         }
 ;    }
-    #region UI SOUND
-    public void OnMouuseOverSound()
+
+    public void Credits()
     {
-        Audio.PlaySound("Select");
+        ScoreUI.FadeOut(false);
+        menuUI.FadeOut(false);
+        CreditsUI.FadeIn(false);
     }
+    #region UI SOUND
     public void OnMouseClick()
     {
         Audio.PlaySound("Click");

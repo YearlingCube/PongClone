@@ -7,6 +7,7 @@ public class GameManger : MonoBehaviour
     public static GameManger instance { get; private set; }
 
     [SerializeField] private UIManager UIManager;
+    [SerializeField] private AudioManager Audio;
 
     [SerializeField] private int ScoreToWin = 3;
     [SerializeField] private int leftScore;
@@ -33,17 +34,21 @@ public class GameManger : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (!inMenu)
         {
-            if (paused)
+
+            if (Input.GetKeyDown(KeyCode.Escape))
             {
-                UIManager.Paused(false);
-            paused = false;
-            }
-            else if (!paused)
-            {
-               UIManager.Paused(true);
-                paused = true;
+                if (paused)
+                {
+                    UIManager.Paused(false);
+                    paused = false;
+                }
+                else if (!paused)
+                {
+                    UIManager.Paused(true);
+                    paused = true;
+                }
             }
         }
     }
@@ -90,8 +95,14 @@ public class GameManger : MonoBehaviour
         bool result = false;
 
         if (leftScore >= ScoreToWin || rightScore >= ScoreToWin)
+        {
             result = true;
-        
+            if(!inMenu)
+            Audio.PlaySound("Win");
+        }
+        else
+            if (!inMenu)
+            Audio.PlaySound("Point");
         return result;
     }
     private void ResetGame()
@@ -133,6 +144,7 @@ public class GameManger : MonoBehaviour
     }
     public void GoToMenu()
     {
+        ball.gameObject.SetActive(true);
         paused = false;
         UIManager.Paused(false);
         UIManager.ShowMenu();
@@ -155,6 +167,11 @@ public class GameManger : MonoBehaviour
     {
         paused = false;
         UIManager.Paused(false);
+    }
+    public void ShowCredits()
+    {
+        UIManager.Credits();
+        ball.gameObject.SetActive(false);
     }
     #endregion
 }
