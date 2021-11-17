@@ -12,6 +12,7 @@ public class Score : MonoBehaviour
         BallMovement Ball = collision.GetComponent<BallMovement>();
         if (Ball)
         {
+            FindObjectOfType<AudioManager>().PlaySound("Point");
             GameManger.instance.Scored(paddleThatScored);
         }
     }

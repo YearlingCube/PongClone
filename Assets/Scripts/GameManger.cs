@@ -21,12 +21,31 @@ public class GameManger : MonoBehaviour
 
     private Paddle.Side serveSide;
 
+    private bool paused = false;
+
     private void Awake()
     {
         instance = this;
         ball = GameObject.FindGameObjectWithTag("Ball").GetComponent<BallMovement>();
 
         DoMenu();
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (paused)
+            {
+                UIManager.Paused(false);
+            paused = false;
+            }
+            else if (!paused)
+            {
+               UIManager.Paused(true);
+                paused = true;
+            }
+        }
     }
 
     private void DoMenu()
@@ -84,6 +103,7 @@ public class GameManger : MonoBehaviour
     }
     private void IntitializeGame()
     {
+        Time.timeScale = 1;
         inMenu = false;
         leftScore = rightScore = 0;
         UIManager.UpdateScoreText(leftScore, rightScore);
@@ -113,6 +133,8 @@ public class GameManger : MonoBehaviour
     }
     public void GoToMenu()
     {
+        paused = false;
+        UIManager.Paused(false);
         UIManager.ShowMenu();
         DoMenu();
     }
@@ -128,6 +150,11 @@ public class GameManger : MonoBehaviour
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
 #endif
+    }
+    public void Resume()
+    {
+        paused = false;
+        UIManager.Paused(false);
     }
     #endregion
 }

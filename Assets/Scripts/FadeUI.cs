@@ -13,7 +13,7 @@ public class FadeUI : MonoBehaviour
 
     private Coroutine fadeCoroutine;
 
-    private void Start()
+    private void Awake()
     {
         CanvasGroup = GetComponent<CanvasGroup>();
         gr = GetComponent<GraphicRaycaster>();

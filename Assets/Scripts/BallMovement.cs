@@ -38,10 +38,10 @@ public class BallMovement : MonoBehaviour
         }
         else
         {
-        Bounce();
+            Bounce();
         }
         if (!GM.inMenu)
-            FindObjectOfType<AudioManager>().Play("Bounce");
+            FindObjectOfType<AudioManager>().PlaySound("Bounce");
     }
     private void Serve(Paddle.Side side)
     {

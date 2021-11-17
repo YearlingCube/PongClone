@@ -8,6 +8,7 @@ public class UIManager : MonoBehaviour
 
     [SerializeField] private FadeUI menuUI;
     [SerializeField] private FadeUI GameOverUI;
+    [SerializeField] private FadeUI PausedUI;
 
     [SerializeField] private TextMeshProUGUI WinnerText;
 
@@ -18,6 +19,7 @@ public class UIManager : MonoBehaviour
         Audio = FindObjectOfType<AudioManager>().GetComponent<AudioManager>();
         menuUI.FadeIn(true);
         GameOverUI.FadeOut(true);
+        PausedUI.FadeOut(true);
     }
     public void UpdateScoreText(int leftScore, int rightScore)
     {
@@ -29,9 +31,11 @@ public class UIManager : MonoBehaviour
     {
         menuUI.FadeOut(false);
         GameOverUI.FadeOut(false);
+        PausedUI.FadeOut(false);
     }
     public void ShowMenu()
     {
+        PausedUI.FadeOut(false);
         GameOverUI.FadeOut(false);
         menuUI.FadeIn(false);
     }
@@ -44,15 +48,27 @@ public class UIManager : MonoBehaviour
         else if (side == Paddle.Side.Right)
             WinnerText.text = "Player 2";
     }
-
+    public void Paused(bool pause)
+    {
+        if (pause)
+        {
+            PausedUI.FadeIn(true);
+            Time.timeScale = 0;
+        }
+        else if (!pause)
+        {
+            PausedUI.FadeOut(false);
+                Time.timeScale = 1;
+        }
+;    }
     #region UI SOUND
     public void OnMouuseOverSound()
     {
-        Audio.Play("Select");
+        Audio.PlaySound("Select");
     }
     public void OnMouseClick()
     {
-        Audio.Play("Click");
+        Audio.PlaySound("Click");
     }
     #endregion
 }
