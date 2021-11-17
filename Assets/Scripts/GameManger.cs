@@ -12,7 +12,7 @@ public class GameManger : MonoBehaviour
     [SerializeField] private int leftScore;
     [SerializeField] private int rightScore;
 
-    [SerializeField] private bool inMenu;
+    public bool inMenu;
 
     private BallMovement ball;
 
@@ -25,6 +25,17 @@ public class GameManger : MonoBehaviour
     {
         instance = this;
         ball = GameObject.FindGameObjectWithTag("Ball").GetComponent<BallMovement>();
+
+        DoMenu();
+    }
+
+    private void DoMenu()
+    {
+        inMenu = true;
+        leftPaddle.isAi = rightPaddle.isAi = true;
+        leftScore = rightScore = 0;
+        UIManager.UpdateScoreText(leftScore, rightScore);
+        ResetGame();
     }
     public void Scored(Paddle.Side side)
     {
@@ -44,7 +55,10 @@ public class GameManger : MonoBehaviour
                 leftScore = rightScore = 0;
             }
             else if (!inMenu)
+            {
                 ball.gameObject.SetActive(false);
+                UIManager.ShowGameOver(side);
+            }
         }
         else
         {
@@ -63,6 +77,7 @@ public class GameManger : MonoBehaviour
     }
     private void ResetGame()
     {
+        ball.gameObject.SetActive(true);
         ball.ResetBall(serveSide);
         leftPaddle.Reset();
         rightPaddle.Reset();
@@ -71,6 +86,48 @@ public class GameManger : MonoBehaviour
     {
         inMenu = false;
         leftScore = rightScore = 0;
+        UIManager.UpdateScoreText(leftScore, rightScore);
         ResetGame();
     }
+    #region Buttons
+    public void Start1Player()
+    {
+        IntitializeGame();
+        rightPaddle.isAi = true;
+        leftPaddle.isAi = false;
+        UIManager.OnGameStart();
+    }
+    public void Start2Player()
+    {
+        IntitializeGame();
+        rightPaddle.isAi = false;
+        leftPaddle.isAi = false;
+        UIManager.OnGameStart();
+    }
+    public void StartAIvsAI()
+    {
+        IntitializeGame();
+        rightPaddle.isAi = true;
+        leftPaddle.isAi = true;
+        UIManager.OnGameStart();
+    }
+    public void GoToMenu()
+    {
+        UIManager.ShowMenu();
+        DoMenu();
+    }
+    public void Replay()
+    {
+        IntitializeGame();
+        UIManager.OnGameStart();
+    }
+    public void Quit()
+    {
+        Debug.Log("QUIT!");
+        Application.Quit();
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#endif
+    }
+    #endregion
 }

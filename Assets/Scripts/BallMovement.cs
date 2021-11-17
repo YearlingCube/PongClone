@@ -5,6 +5,7 @@ using System.Collections;
 public class BallMovement : MonoBehaviour
 {
 	private Rigidbody2D rb;
+    private GameManger GM;
     public Vector2 velocity { get; private set; }
 
 	[SerializeField] private float Speed = 12;
@@ -17,9 +18,10 @@ public class BallMovement : MonoBehaviour
 
     private bool overridePosition;
 
-    void Start()
+    void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        GM = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManger>();
         Serve(Paddle.Side.Left);
     }
 
@@ -38,6 +40,8 @@ public class BallMovement : MonoBehaviour
         {
         Bounce();
         }
+        if (!GM.inMenu)
+            FindObjectOfType<AudioManager>().Play("Bounce");
     }
     private void Serve(Paddle.Side side)
     {

@@ -73,7 +73,7 @@ public class Paddle : MonoBehaviour
         }
         else
         {
-            float movement = Input.GetAxisRaw("Vertical") * Speed * Time.deltaTime;
+            float movement = Input.GetAxisRaw("Vertical " + side.ToString()) * Speed * Time.deltaTime;
             result = transform.position.y + movement;
         }
         return result;
